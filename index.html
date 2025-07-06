@@ -132,12 +132,9 @@
             bottom: 0;
             background: rgba(0,0,0,0.9);
             z-index: 1000;
-            display: flex;
+            display: none;
             justify-content: center;
             align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s;
         }
         
         .fake-modal-content {
@@ -146,6 +143,8 @@
             border: 3px solid #ff0000;
             max-width: 500px;
             text-align: center;
+            position: relative;
+            z-index: 1001;
         }
         
         .cursor-trail {
@@ -165,8 +164,8 @@
         <div class="fake-modal-content">
             <h2 style="color: #ff0000;">WAIT! DON'T MISS OUT</h2>
             <p>97% of visitors who leave without signing up never come back and miss this life-changing opportunity.</p>
-            <button onclick="document.getElementById('fakeModal').style.opacity = '0'" style="background: #ff0000; color: white; border: none; padding: 15px 30px; margin-top: 20px; cursor: pointer;">I'll regret this later</button>
-            <button onclick="document.getElementById('emailInput').focus(); document.getElementById('fakeModal').style.opacity = '0'" style="background: #00aa00; color: white; border: none; padding: 15px 30px; margin-top: 20px; cursor: pointer;">Let me sign up now</button>
+            <button onclick="closeModal()" style="background: #ff0000; color: white; border: none; padding: 15px 30px; margin-top: 20px; cursor: pointer;">I'll regret this later</button>
+            <button onclick="focusForm()" style="background: #00aa00; color: white; border: none; padding: 15px 30px; margin-top: 20px; cursor: pointer;">Let me sign up now</button>
         </div>
     </div>
 
@@ -195,13 +194,13 @@
         </div>
         
         <div class="form-container">
-            <form method="post" action="https://www.sendsteed.com/subscribe/" id="signupForm">
-                <input name="e108028" required type="email" placeholder="(Your pre-approved email)" autofocus id="emailInput">
-                <input name="n108028" required type="text" placeholder="(Your full name for payment)" id="nameInput">
+            <form method="post" action="https://www.sendsteed.com/subscribe/" id="signupForm" onsubmit="return true;">
+                <input name="e108028" required type="text" placeholder="your@email.com" autofocus id="emailInput">
+                <input name="n108028" required type="text" placeholder="Name" id="nameInput">
                 <input type="hidden" name="lllid" value="108028">
                 <input type="hidden" name="lluid" value="sandyarta">
                 <input type="hidden" name="redirect" value="">
-                <input type="hidden" name="source" value="githubemailseite_darkfinal">
+                <input type="hidden" name="source" value="">
                 
                 <div style="background-color: rgba(255,0,0,0.1); padding: 15px; border-radius: 5px; margin: 20px 0; text-align: center;">
                     <label style="display: block; margin-bottom: 10px;">
@@ -210,7 +209,7 @@
                     </label>
                 </div>
                 
-                <button type="submit">⚠️ CONFIRM MY ACCESS NOW</button>
+                <button type="submit">Submit</button>
             </form>
         </div>
     </div>
@@ -240,6 +239,15 @@
             }
         }
         
+        function closeModal() {
+            document.getElementById('fakeModal').style.display = 'none';
+        }
+        
+        function focusForm() {
+            document.getElementById('emailInput').focus();
+            closeModal();
+        }
+        
         updateCountdown();
         
         // Fake visitor counter
@@ -264,15 +272,8 @@
         
         // Fake system alert
         setTimeout(() => {
-            document.getElementById('fakeModal').style.opacity = '1';
-            document.getElementById('fakeModal').style.pointerEvents = 'all';
+            document.getElementById('fakeModal').style.display = 'flex';
         }, 10000);
-        
-        // Prevent leaving
-        window.addEventListener('beforeunload', function(e) {
-            e.preventDefault();
-            e.returnValue = 'Your $500+ daily payments will be canceled if you leave now!';
-        });
         
         // Auto-scroll to form
         setTimeout(() => {
